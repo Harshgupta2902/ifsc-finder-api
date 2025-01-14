@@ -4,10 +4,17 @@ const fs = require("fs");
 const path = require("path");
 
 const dataFilePath = path.join(__dirname, "/scrap/ifsc-code.json");
+let cachedData = null;
+
 function loadBankData() {
+  if (cachedData) {
+    return cachedData;
+  }
+
   try {
     const data = fs.readFileSync(dataFilePath, "utf-8");
-    return JSON.parse(data);
+    cachedData = JSON.parse(data); // Cache the data
+    return cachedData;
   } catch (error) {
     console.error("Error reading JSON file:", error);
     return [];
