@@ -17,7 +17,7 @@ fs.readFile(inputFilePath, 'utf-8', (err, data) => {
         const inputData = JSON.parse(data);
 
         // Transform the data into an array of objects
-        const transformedData = Object.values(inputData[0]);
+        const transformedData = Object.keys(inputData).map(key => inputData[key]);
 
         // Write the transformed data to the output file
         fs.writeFile(outputFilePath, JSON.stringify(transformedData, null, 2), 'utf-8', (err) => {

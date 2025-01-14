@@ -25,8 +25,6 @@ router.get("/", async (req, res) => {
 
   try {
     const result = bankData.filter(bank => bank.IFSC.startsWith(ifsc.toUpperCase()));
-
-    // const result = bankData.find((bank) => bank.IFSC === ifsc.toUpperCase());
     if (!result) {
       return res
         .status(404)

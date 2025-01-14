@@ -4,8 +4,8 @@ const path = require('path');
 // Directory containing JSON files
 const directory = path.join(__dirname, 'by-bank');
 
-// Array to store merged data
-let mergedData = [];
+// Object to store merged data
+let mergedData = {};
 
 // Read all files in the directory
 fs.readdir(directory, (err, files) => {
@@ -19,7 +19,9 @@ fs.readdir(directory, (err, files) => {
         const filePath = path.join(directory, file);
         try {
             const data = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
-            mergedData.push(...(Array.isArray(data) ? data : [data])); // Merge array or single object
+
+            // Merge the objects
+            Object.assign(mergedData, data);
         } catch (error) {
             console.error(`Error parsing JSON from file ${file}:`, error);
         }
