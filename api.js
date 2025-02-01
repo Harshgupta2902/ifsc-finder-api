@@ -1,6 +1,10 @@
 const express = require("express");
-
+const mongoose = require("mongoose");
 const app = express();
+
+
+
+
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Cache-Control", "public, max-age=3600");
@@ -13,6 +17,12 @@ app.use((req, res, next) => {
   next();
 });
 // -------------------------------------------------------------------------------------------------------
+
+
+mongoose
+  .connect("mongodb+srv://jobMacthr:eAZFlsUVS7YO4Ngc@jobmatchr.ht4xx.mongodb.net/?retryWrites=true&w=majority&appName=JobMatchrs", { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => console.log("✅ Connected to MongoDB"))
+  .catch((err) => console.error("❌ MongoDB Connection Error:", err.message));
 
 
 const search = require("./search");
