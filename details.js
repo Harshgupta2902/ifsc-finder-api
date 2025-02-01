@@ -1,49 +1,25 @@
 const express = require("express");
 const router = express.Router();
-const fs = require("fs");
-const path = require("path");
+const IFSC = require("./ifsc_model");
 
-const dataFilePath = path.join(__dirname, "/scrap/ifsc-code.json");
-let cachedData = null;
-
-function loadBankData() {
-  if (cachedData) {
-    return cachedData;
-  }
-
+// 📌 GET /app/details?ifsc=ABHY0065001
+router.get("/", async (req, res) => {
   try {
-    const data = fs.readFileSync(dataFilePath, "utf-8");
-    cachedData = JSON.parse(data); // Cache the data
-    return cachedData;
-  } catch (error) {
-    console.error("Error reading JSON file:", error);
-    return [];
-  }
-}
-
-router.get("/:ifsc", async (req, res) => {
-  const { ifsc } = req.params;
-
-  if (!ifsc) {
-    return res.status(400).json({ error: "IFSC code is required" });
-  }
-
-  const bankData = loadBankData();
-
-  try {
-    const result = bankData.find((bank) => bank.IFSC === ifsc.toUpperCase());
-    if (!result) {
-      return res
-        .status(404)
-        .json({ error: "Bank not found for the provided IFSC code" });
+    const { ifsc } = req.query;
+    if (!ifsc) {
+      return res.status(400).json({ error: "IFSC code is required" });
     }
-    res.json({ success: true, data: result });
+
+    const bankDetails = await IFSC.findOne({ IFSC: ifsc.toUpperCase() });
+
+    if (!bankDetails) {
+      return res.status(404).json({ error: "IFSC code not found" });
+    }
+
+    res.json({ status: true, result: bankDetails });
   } catch (error) {
-    console.error("Error fetching data:", error);
-    res.status(500).json({
-      success: false,
-      message: "No Data Found",
-    });
+    console.error("Error fetching IFSC details:", error.message);
+    res.status(500).json({ status: false, error: "Internal server error" });
   }
 });
 
