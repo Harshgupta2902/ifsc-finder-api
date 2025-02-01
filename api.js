@@ -25,10 +25,18 @@ mongoose
   .catch((err) => console.error("❌ MongoDB Connection Error:", err.message));
 
 
-const search = require("./search");
+const getbanks = require("./getbanks");
+const getstate = require("./getstate");
+const getcity = require("./getcity");
+const getbranch = require("./getbranch");
+const getbranchdetails = require("./getbranchdetails");
 const details = require("./details");
 
-app.use("/app/search", search);
+app.use("/app/getbanks", getbanks);
+app.use("/app/getstates", getstate);
+app.use("/app/getcity", getcity);
+app.use("/app/getbranch", getbranch);
+app.use("/app/getbranchdetails", getbranchdetails);
 app.use("/app/details", details);
 
 // -------------------------------------------------------------------------------------------------------
